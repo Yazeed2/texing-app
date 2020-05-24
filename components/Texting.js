@@ -1,35 +1,53 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { View, Text, TextInput, Button, ScrollView } from 'react-native'
 import style from './style'
 import {Grid, Col, Row} from 'react-native-easy-grid'
+import { getMessages, sendMessage } from '../firebase';
+import { database } from 'firebase';
 export default function Texting() {
+    const [state, set] = useState({refresh:true})
 
-    const [state, set] = useState({sended:[]})
     const setState = (obj) => {
       set({...state, ...obj})
     }
+    const setMessages  = (payload) => { 
+    
+    }  
+    useEffect(() => {
+        
+           database().ref().on('value', (payload)=>{
+            var data = payload.val()
+            console.log( data.texting);
+                if(data.texting == undefined){
+                    data.texting = []
+                }
+            
+               set({...state, messages: data.texting, refresh :!state.refresh})
+           })
+
+    }, [])
+  
    const setText = (text) => {
      setState({text})
 
     
    }
    const sendIt = () => {
-       if(state.text === '='){
-        state.sended = []
-       }else if (state.text){
-        setState({sended: state.sended.push(state.text) })
-
+  if (state.text){
+    set({...state, messages:state.messages.push(state.text)})
+    sendMessage( state.messages)
        }
        setText('')
 
 
    }
+   
     return (
      <View >
          <Grid>
              <Row size={9}>
                  <ScrollView style={style.textingArea}>
-            {state.sended && state.sended.map(txt =><View style={style.message}> 
+            {state.messages && state.messages.map((txt, i) =><View key={i} style={style.message}> 
             <Text>{txt}</Text>
              </View> )}
                  </ScrollView>
@@ -41,6 +59,7 @@ export default function Texting() {
             onChangeText={(text)=>setText(text)}
             placeholder='type somthing'
             value={state.text}
+            onSubmitEditing={sendIt}
         /> 
 
 

@@ -39,7 +39,7 @@ const style = StyleSheet.create({
         marginTop : 10, 
         marginRight: 0 ,
         marginLeft: width * 0.2 ,
-        padding:5,
+        padding:5,//
         color: colors.white
 
       },
