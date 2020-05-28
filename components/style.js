@@ -45,6 +45,9 @@ const style = StyleSheet.create({
       },
       textingArea : { 
           marginTop: height * 0.05
+      },
+      widthFull: { 
+        width: width 
       }
 })
 

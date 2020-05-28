@@ -4,10 +4,12 @@ firebase.initializeApp(config)
 
 
 const db = firebase.database()
+export const auth = firebase.auth
+export const firestore = firebase.firestore
 export const sendMessage = (message) => {
 
    
-    db.ref('/texting').set(message)
+    db.ref('/chat').set(message)
     return; 
 }
 export const getMessages = (back) => { 
