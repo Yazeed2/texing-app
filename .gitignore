@@ -12,3 +12,5 @@ web-report/
 config.js
 # macOS
 .DS_Store
+firebase.json
+.firebaserc

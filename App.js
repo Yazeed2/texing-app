@@ -40,10 +40,10 @@ export default function App() {
     <View style={styles.container}>
    {/* <Texting /> 
     */}
-    {state.userId? 
+    {state.userId && !state.searching && !state.chatId? 
       <Home callback={startChat} />
      : <Loading/>}
-  {state.searching? <Loading />: <></>}
+  
      {state.chatId && state.userId?<Chat userId ={state.userId} /> : <></> }
     </View>
   );
