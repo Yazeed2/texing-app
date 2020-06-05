@@ -48,7 +48,13 @@ const style = StyleSheet.create({
       },
       widthFull: { 
         width: width 
-      }
+      },
+      chatBtn: {
+        width: width / 2,
+        height: 30 ,
+        backgroundColor: 'green'
+
+      },
 })
 
 export default style 

@@ -19,3 +19,32 @@ export const getMessages = (back) => {
        back(payload.val())
     })
 }
+// export const createRoom = async () => { 
+//     let key = firebase().database().ref('').child('chat').push().key
+//     let ref = firebase.database.ref() 
+//     let update = {}
+
+//     update['chat/'+ key] = []
+    
+//     ref.update(update).then(data => {
+//         Promise.resolve({id: key})
+//     })
+
+
+// }
+
+export const waitingList = async (userId) => {
+    try{ 
+
+        
+        await firebase.firestore().collection('waitingList').doc(userId).set({userId})
+        Promise.resolve('done')
+    }
+    catch (err){ 
+        console.log('error in waitingList', err);
+        Promise.reject(new Error('Something went wrong I can feel It :( (probably firebase)'))
+        
+    }
+    
+
+}

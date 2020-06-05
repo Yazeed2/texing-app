@@ -1,11 +1,11 @@
 import React,{useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import Texting from './components/Texting'
+// import Texting from './components/Texting'
 import Chat from './components/Chat'
-import {getMessages} from './firebase' 
-import {firestore, auth} from 'firebase' 
 import Loading from './components/loading/Loading'
-
+import {auth} from 'firebase'
+import {waitingList} from './firebase'
+import Home from './components/Home'
 
 export default function App() {
   const [state, setState] = useState({})
@@ -32,13 +32,19 @@ export default function App() {
       // ...
     });
   }, [])
+  const startChat = async () => {
+    setState({...state, searching: true})
+    waitingList(state.userId)
+  }
   return (
     <View style={styles.container}>
    {/* <Texting /> 
     */}
     {state.userId? 
-    <Chat userId ={state.userId} /> 
+      <Home callback={startChat} />
      : <Loading/>}
+  {state.searching? <Loading />: <></>}
+     {state.chatId && state.userId?<Chat userId ={state.userId} /> : <></> }
     </View>
   );
 }
