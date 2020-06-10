@@ -7,17 +7,15 @@ import Axios from 'axios'
 const db = firebase.database()
 export const auth = firebase.auth
 export const firestore = firebase.firestore
-export const sendMessage = (message) => {
+export const sendMessage = (message, roomId) => {
 
    
-    db.ref('/chat').set(message)
+    db.ref('/chat/'+roomId).set(message)
     return; 
 }
-export const getMessages = (back) => { 
-    db.ref('texting').on('value',(payload)=>{
-        console.log(payload.val());
-        
-       back(payload.val())
+export const getMessages = (back, roomId) => { 
+    db.ref('texting/'+roomId).on('value',(payload)=>{
+               back(payload.val())
     })
 }
 // export const createRoom = async () => { 
@@ -44,9 +42,20 @@ export const waitingList = async (userId) => {
     }
     catch (err){ 
         console.log('error in waitingList', err);
-        Promise.reject(new Error('Something went wrong I can feel It :( (probably firebase)'))
+        Promise.reject(new Error(err))
         
     }
     
 
+}
+
+export const getRoomId = async (uid, setRoom)=> {
+    firebase.firestore().collection("users").doc(uid).onSnapshot(data=> {
+        data = data.data()
+        if(data.roomId){
+            setRoom(data.roomId)
+            console.log(data.roomId);
+            
+        }
+    })
 }

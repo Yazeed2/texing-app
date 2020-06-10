@@ -35,7 +35,9 @@ app.post('/waitingList', (req,res)=> {
             batch.update(userRef, {roomId})
             batch.commit()
             .then(done => res.status(200).json({msg: 'Now you can join the room :) '}))
-            .catch(err => res.status(500).json({err}))
+            .catch(err => {res.status(500).json({err})
+            console.log(err)
+        })
 
             
         }else{ 

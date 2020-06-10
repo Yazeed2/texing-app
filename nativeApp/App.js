@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 // import Texting from './components/Texting'
 import Chat from './components/Chat'
 import Loading from './components/loading/Loading'
-import {auth} from 'firebase'
-import {waitingList} from './firebase'
+import {auth, firestore} from 'firebase'
+import {waitingList, getRoomId} from './firebase'
 import Home from './components/Home'
 
 export default function App() {
@@ -23,6 +23,7 @@ export default function App() {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
+        firestore().collection('users').doc(uid).set({userId:uid})
         console.log('heys')
         setState({...state, userId: user.uid})
 
@@ -32,19 +33,24 @@ export default function App() {
       // ...
     });
   }, [])
+  const setRoom = (roomId)=> {
+    setState({...state,  roomId})
+  }
   const startChat = async () => {
     setState({...state, searching: true})
-    waitingList(state.userId)
+    await waitingList(state.userId)
+     getRoomId(state.userId, setRoom)
   }
   return (
     <View style={styles.container}>
    {/* <Texting /> 
     */}
-    {state.userId && !state.searching && !state.chatId? 
+    {state.userId && !state.searching && !state.roomId? 
       <Home callback={startChat} />
-     : <Loading/>}
+     : <></>}
+     {!state.userId|| state.searching?<Loading/>: <></>}
   
-     {state.chatId && state.userId?<Chat userId ={state.userId} /> : <></> }
+     {state.roomId && state.userId? <Chat userId ={state.userId} roomId={state.roomId} /> : <></> }
     </View>
   );
 }

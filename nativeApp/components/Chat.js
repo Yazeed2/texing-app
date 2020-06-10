@@ -10,7 +10,7 @@ export default class Example extends React.Component {
  
   componentDidMount() {
 
-    database().ref('/chat').on('value', payload => {
+    database().ref('/chat/'+this.props.roomId).on('value', payload => {
         this.setState({messages: payload.val()})
     })
        
@@ -22,7 +22,7 @@ export default class Example extends React.Component {
     // }))
     let chat = GiftedChat.append(this.state.messages, messages)
     chat[0].createdAt = new Date()
-    sendMessage(chat)
+    sendMessage(chat, this.props.roomId)
 
   }
  
