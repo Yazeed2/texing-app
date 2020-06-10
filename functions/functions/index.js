@@ -1,13 +1,18 @@
-const {v1:uuid} = require('uuid')
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-admin.initializeApp();
+const admin = require('firebase-admin')
+const express = require('express')
+const {v1:uuid} = require('uuid')
+const app = express()
+const cors = require('cors')
 
+admin.initializeApp()
 const db = admin.firestore()
-const realTime = admin.database()
 
+app.use(cors())
 
-exports.waiting = functions.https.onRequest((req, res)=> { 
+app.use(express.json())
+app.use(express.urlencoded({extended:false}))
+app.post('/waitingList', (req,res)=> {
     let payload = req.body
     let uid = payload.uid
 
@@ -41,3 +46,5 @@ exports.waiting = functions.https.onRequest((req, res)=> {
         }
     })
 })
+
+exports.app = functions.https.onRequest(app);

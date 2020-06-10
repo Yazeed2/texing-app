@@ -2,7 +2,8 @@ import firebase from 'firebase'
 import config from './config'
 firebase.initializeApp(config)
 
-
+import link from './link'
+import Axios from 'axios'
 const db = firebase.database()
 export const auth = firebase.auth
 export const firestore = firebase.firestore
@@ -35,9 +36,10 @@ export const getMessages = (back) => {
 
 export const waitingList = async (userId) => {
     try{ 
-
-        
-        await firebase.firestore().collection('waitingList').doc(userId).set({userId})
+        // await firebase.firestore().collection('waitingList').doc(userId).set({userId})
+        await Axios.post(link+'waitingList',{ 
+            uid: userId ,
+        })
         Promise.resolve('done')
     }
     catch (err){ 
